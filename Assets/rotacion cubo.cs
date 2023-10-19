@@ -11,6 +11,7 @@ public class NewBehaviourScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();//sacar rigybody del objeto basico
+        rb.useGravity = false;
     }
 
     // Update is called once per frame

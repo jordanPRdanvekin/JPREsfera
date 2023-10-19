@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class camara : MonoBehaviour
@@ -11,7 +12,21 @@ public class camara : MonoBehaviour
     {
       
     }
-
+    private void FixedUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.I)) //activamos la primera persona al hacer que las 3 variables sean 0
+        {
+            offestY = 0;
+            offestX = 0;
+            offestZ = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.K))  //activamos la tercera persona
+        {
+            offestX = 0;
+            offestZ = 2;
+            offestY = 1;
+        }
+    }
     // Update is called once per frame
     void Update()
     {

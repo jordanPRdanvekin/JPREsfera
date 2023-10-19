@@ -29,11 +29,11 @@ public class esphera : MonoBehaviour
     }
     private void FixedUpdate() //como el udape pero a tiempo real 
     {
-        Vector3 NUEVELO = new Vector3(movx * movimiento, fisicas.velocity.y, movz * movimiento); //con este calculo procesamos el movimiento 
-        fisicas.velocity = NUEVELO; //hay que añadir el vector del rigybody que vamos a escalar en este caso velocity 
+        Vector3 NUEVELO = new Vector3(movx * movimiento, fisicas.velocity.y, movz * movimiento); //con este calculo procesamos el movimiento como vector constante nuevelo es el vector
+        fisicas.AddForce(NUEVELO,ForceMode.Acceleration); // con force mode vamos añadiendo un tipo de fuerza en este caso de acceleracion para que el objeto vaya llendo mas rapido
         if (salto)
         {
-            fisicas.AddForce(Vector3.up * 5, ForceMode.Impulse);
+            fisicas.AddForce(Vector3.up * 5, ForceMode.Impulse); //cuanto mas saltes mas impulso obtiene ya que usa un force mode de impulso el cual se acumula
             salto = false;
         }
     }
