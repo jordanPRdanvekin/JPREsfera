@@ -8,6 +8,7 @@ public class esphera : MonoBehaviour
     public Rigidbody fisicas; //llamada del rigidbody del cubo
     public float movx, movz;//saca los movimientos x y z 
     public bool salto;
+    public bool suelo; 
 
 
     // Start is called before the first frame update
@@ -31,11 +32,18 @@ public class esphera : MonoBehaviour
     {
         Vector3 NUEVELO = new Vector3(movx * movimiento, fisicas.velocity.y, movz * movimiento); //con este calculo procesamos el movimiento como vector constante nuevelo es el vector
         fisicas.AddForce(NUEVELO,ForceMode.Acceleration); // con force mode vamos añadiendo un tipo de fuerza en este caso de acceleracion para que el objeto vaya llendo mas rapido
+        if (salto && suelo)
+        {
+            fisicas.AddForce(Vector3.up * 5, ForceMode.Impulse);
+             //cuanto mas saltes mas impulso obtiene ya que usa un force mode de impulso el cual se acumula
+
+        }
         if (salto)
         {
-            fisicas.AddForce(Vector3.up * 5, ForceMode.Impulse); //cuanto mas saltes mas impulso obtiene ya que usa un force mode de impulso el cual se acumula
+            fisicas.AddForce(Vector3.up * 5, ForceMode.Impulse);
             salto = false;
         }
+       
     }
     void OnTriggerEnter(Collider other)
     {
@@ -47,10 +55,11 @@ public class esphera : MonoBehaviour
 
     }
 
-    private void OnCollisionEnter(Collision collision) //cuando coliciona activa un efecto en este caso por ejemplo salto se vuelve falso 
+    private void OnCollision(Collision collision) //cuando coliciona activa un efecto en este caso por ejemplo salto se vuelve falso 
     {if (collision.gameObject.CompareTag("suelo"))
         {
-            salto = false;
+            suelo = true;
+          
         }
         
     }
@@ -59,7 +68,7 @@ public class esphera : MonoBehaviour
 {
     if (collision.gameObject.CompareTag("suelo"))
     {
-        salto = false;
+        suelo = false;
     }
 }
 }
