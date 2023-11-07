@@ -2,73 +2,69 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class esphera : MonoBehaviour
+public class esfera : MonoBehaviour
 {
-    public float movimiento = 1f; // Velocidad de movimiento del cubo
-    public Rigidbody fisicas; //llamada del rigidbody del cubo
-    public float movx, movz;//saca los movimientos x y z 
+    public float movimiento = 1f; // Velocidad de movimiento de la esfera
+    public Rigidbody fisicas; // Llamada al componente Rigidbody de la esfera
+    public float movx, movz; // Variables para el movimiento en los ejes x y z
     public bool salto;
-    public bool suelo; 
-
+    public bool suelo;
 
     // Start is called before the first frame update
-    void Start() //es el inicio del juego 
+    void Start() // Esto se ejecuta al inicio del juego
     {
-        fisicas = GetComponent<Rigidbody>(); //obtenemos el rygybody
+        fisicas = GetComponent<Rigidbody>(); // Obtenemos el componente Rigidbody de la esfera
     }
 
     // Update is called once per frame
-    void Update() //es el cuerpo del objeto es decir lo que sucede durante el juego
+    void Update() // Esto se ejecuta durante el juego
     {
-        movx = Input.GetAxis("Horizontal"); //obtenems la tecla para el movimiento horizontal
-        movz = Input.GetAxis("Vertical");//igual pero para la z
+        movx = Input.GetAxis("Horizontal"); // Obtenemos la entrada para el movimiento horizontal
+        movz = Input.GetAxis("Vertical"); // Lo mismo para el movimiento en el eje z
 
         if (Input.GetButtonDown("Jump"))
         {
-            salto = true;
+            salto = true; // Se activa cuando se presiona el botón para saltar
         }
     }
-    private void FixedUpdate() //como el udape pero a tiempo real 
+
+    private void FixedUpdate() // Se ejecuta a intervalos regulares de tiempo
     {
-        Vector3 NUEVELO = new Vector3(movx * movimiento, fisicas.velocity.y, movz * movimiento); //con este calculo procesamos el movimiento como vector constante nuevelo es el vector
-        fisicas.AddForce(NUEVELO,ForceMode.Acceleration); // con force mode vamos añadiendo un tipo de fuerza en este caso de acceleracion para que el objeto vaya llendo mas rapido
+        Vector3 NUEVELO = new Vector3(movx * movimiento, fisicas.velocity.y, movz * movimiento);
+        // Calculamos el nuevo vector de movimiento con las entradas del jugador y la velocidad actual en el eje y
+        fisicas.AddForce(NUEVELO, ForceMode.Acceleration);
+        // Aplicamos una fuerza para mover la esfera
+
         if (salto && suelo)
         {
             fisicas.AddForce(Vector3.up * 5, ForceMode.Impulse);
-             //cuanto mas saltes mas impulso obtiene ya que usa un force mode de impulso el cual se acumula
-
+            // Aplicamos un impulso hacia arriba para simular un salto
+            salto = false; // Desactivamos el salto para evitar saltos múltiples
         }
-        if (salto)
-        {
-            fisicas.AddForce(Vector3.up * 5, ForceMode.Impulse);
-            salto = false;
-        }
-       
     }
+
     void OnTriggerEnter(Collider other)
     {
-        // Verificar si la colisión es con un objeto etiquetado como "moneda" y destruir ambos objetos
-        if (other.gameObject.CompareTag("coin")) //si choca con las coins... 
+        // Verificamos si hubo colisión con un objeto etiquetado como "moneda" y destruimos ambos objetos
+        if (other.gameObject.CompareTag("coin"))
         {
-            Destroy(other.gameObject);//destrulles el objeto colisionado es decir las coin
+            Destroy(other.gameObject); // Destruimos la moneda al recogerla
         }
-
     }
 
-    private void OnCollision(Collision collision) //cuando coliciona activa un efecto en este caso por ejemplo salto se vuelve falso 
-    {if (collision.gameObject.CompareTag("suelo"))
-        {
-            suelo = true;
-          
-        }
-        
-    }
-
-    private void OnCollisionExit(Collision collision) //lo mismo que el anterior pero al dejar de impactar con el objeto 
-{
-    if (collision.gameObject.CompareTag("suelo"))
+    private void OnCollisionEnter(Collision collision)
     {
-        suelo = false;
+        if (collision.gameObject.CompareTag("suelo"))
+        {
+            suelo = true; // Se activa cuando colisiona con el suelo
+        }
     }
-}
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("suelo"))
+        {
+            suelo = false; // Se desactiva al dejar de tocar el suelo
+        }
+    }
 }
